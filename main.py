@@ -15,8 +15,10 @@ from nltk.corpus import stopwords
 from collections import Counter
 from textblob import TextBlob
 
-# Questa rigs può essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
+#Queste righe possono essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
 #spacy.cli.download("en_core_web_sm")
+#nltk.download('stopwords')
+#nltk.download('vader_lexicon')
 
 # Non stampa i FutureWarning nella console
 warnings.simplefilter(action='ignore', category=FutureWarning)

@@ -7,7 +7,6 @@
 # Effettuiamo Sentiment e Content Analysis
 
 import pandas as pd
-import numpy as np
 import warnings
 import spacy
 from nltk.sentiment import SentimentIntensityAnalyzer

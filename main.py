@@ -21,9 +21,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.feature_extraction.text import CountVectorizer
 
 # Queste righe possono essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
-#spacy.cli.download("en_core_web_sm")
-#nltk.download('stopwords')
-#nltk.download('vader_lexicon')
+# spacy.cli.download("en_core_web_sm")
+# nltk.download('stopwords')
+# nltk.download('vader_lexicon')
 
 # Non stampa i FutureWarning nella console
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -68,7 +68,7 @@ y = df['polarity']
 
 vect = CountVectorizer()
 vect.fit(texts)
-x =vect.transform(texts)
+x = vect.transform(texts)
 
 x_train, x_test , y_train, y_test =train_test_split(x,y)
 #print(x_train.shape,y_train.shape)

@@ -12,7 +12,7 @@ from nltk.corpus import stopwords
 from collections import Counter
 from textblob import TextBlob
 
-spacy.cli.download("en_core_web_sm")
+#spacy.cli.download("en_core_web_sm")
 
 # Non stampa i FutureWarning nella console
 warnings.simplefilter(action='ignore', category=FutureWarning)

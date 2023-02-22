@@ -1,5 +1,8 @@
 # Progetto per il Corso di Semantic Intelligence
 
+# Campopiano Daniele - 174624
+# Salvatore Carmine - 174337
+
 # Dato un Dataset (presente nella root del progetto)
 # Effettuiamo Sentiment e Content Analysis
 
@@ -12,6 +15,7 @@ from nltk.corpus import stopwords
 from collections import Counter
 from textblob import TextBlob
 
+# Questa rigs può essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
 #spacy.cli.download("en_core_web_sm")
 
 # Non stampa i FutureWarning nella console

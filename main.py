@@ -7,6 +7,7 @@
 # Effettuiamo Sentiment e Content Analysis
 
 import pandas as pd
+import numpy as np
 import warnings
 import spacy
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -14,8 +15,12 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from collections import Counter
 from textblob import TextBlob
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.feature_extraction.text import CountVectorizer
 
-#Queste righe possono essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
+# Queste righe possono essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
 #spacy.cli.download("en_core_web_sm")
 #nltk.download('stopwords')
 #nltk.download('vader_lexicon')
@@ -29,6 +34,7 @@ df = pd.read_csv('dataset.csv')
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Sentiment Analysis: Calcola la Media generale del Sentiment dei tweet, il sentiment per ogni tweet
+# e quello in base ad una frase passata in input
 
 # Rimuovi gli hashtag, i link e i simboli dal testo del tweet
 df['clean_tweet'] = df['tweet'].str.replace('#', '').str.replace('http\S+|www.\S+', '', case=False)
@@ -57,18 +63,48 @@ for i, row in df.iterrows():
     sentiment = blob.sentiment.polarity
     df.at[i, 'sentiment'] = sentiment
 
+texts = df['tweet']
+y = df['polarity']
+
+vect = CountVectorizer()
+vect.fit(texts)
+x =vect.transform(texts)
+
+x_train, x_test , y_train, y_test =train_test_split(x,y)
+#print(x_train.shape,y_train.shape)
+model = LogisticRegression()
+model.fit(x_train,y_train)
+
+p_train = model.predict(x_train)
+p_test = model.predict(x_test)
+
+acc_train = accuracy_score(y_train,p_train)
+acc_test = accuracy_score(y_test,p_test)
+
+nuovi_testi = [
+    'i love dogs because the are beautiful',
+]
+nuovi_x= vect.transform(nuovi_testi)
+prediction= model.predict(nuovi_x)
+
+print(prediction)
+print(model.predict_proba(nuovi_x))
+
 # Salva i risultati su un file di testo
 with open('Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8') as f:
-        f.write(f"La media del Sentiment Analysis dei tweet è: {sentiment_mean:.2f}\n\n")
-        f.write(f"I sentiment per ogni tweet sono i seguenti:\n")
+        f.write(f"La media del Sentiment Analysis dei tweet è: {sentiment_mean:.2f}\n")
+        f.write(f"\nI sentiment per ogni tweet sono i seguenti:\n")
         for i, row in df.iterrows():
             text = row['tweet']
             sentiment = row['sentiment']
-            f.write(f'Testo: {text}\nSentimento: {sentiment}\n\n')
+            f.write(f'Testo: {text}\nSentimento: {sentiment}\n')
+        f.write(f"\nIl sentiment della frase {nuovi_testi} è il seguente:\n")
+        f.write(f"{prediction}\n")
+        f.write(f"{model.predict_proba(nuovi_x)}")
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Content Analysis: Trova le 50 parole più frequenti ed Identifica frasi ed entità nomi nei tweet
+# Content Analysis: Trova le 50 parole più frequenti ed Identifica frasi e entità nomi nei tweet
 
 # Tokenizza i tweet
 tokens = [word_tokenize(tweet) for tweet in df['tweet']]

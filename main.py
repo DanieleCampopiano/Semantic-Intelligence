@@ -1,5 +1,5 @@
 # Progetto per il Corso di Semantic Intelligence
-
+import analyzer as analyzer
 # Campopiano Daniele - 174624
 # Salvatore Carmine - 174337
 
@@ -19,7 +19,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.feature_extraction.text import CountVectorizer
 
-# Queste righe possono essere commentata/decommentata in base a se 'en_core_web_sm' di Spacy è installato nel sistema
+# Queste righe possono essere commentata/decommentata in base a se le librerie indicate sono installate o meno
 # spacy.cli.download("en_core_web_sm")
 # nltk.download('stopwords')
 # nltk.download('vader_lexicon')
@@ -32,8 +32,9 @@ df = pd.read_csv('dataset.csv')
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Sentiment Analysis: Calcola la Media generale del Sentiment dei tweet, il sentiment per ogni tweet
-# e quello in base ad una frase passata in input
+# Sentiment Analysis: Calcola la Media generale del Sentiment dei tweet,
+# il sentiment per ogni tweet, il numero di Tweet con sentiment positivo/neutro/negativo
+# ed il sentiment in base ad una frase passata in input
 
 # Rimuovi gli hashtag, i link e i simboli dal testo del tweet
 df['clean_tweet'] = df['tweet'].str.replace('#', '').str.replace('http\S+|www.\S+', '', case=False)
@@ -86,12 +87,30 @@ nuovi_testi = [
 nuovi_x= vect.transform(nuovi_testi)
 prediction= model.predict(nuovi_x)
 
-print(prediction)
-print(model.predict_proba(nuovi_x))
+# Esegue un'analisi di sentiment sui tweet
+positive_tweets = 0
+negative_tweets = 0
+neutral_tweets = 0
+sentiment_scores = []
+analyzer = SentimentIntensityAnalyzer()
+
+for tweet in df['clean_tweet']:
+    sentiment = analyzer.polarity_scores(tweet)
+    sentiment_scores.append(sentiment['compound'])
+    if sentiment['compound'] > 0:
+        positive_tweets += 1
+    elif sentiment['compound'] < 0:
+        negative_tweets += 1
+    else:
+        neutral_tweets += 1
 
 # Salva i risultati su un file di testo
 with open('Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8') as f:
         f.write(f"La media del Sentiment Analysis dei tweet è: {sentiment_mean:.2f}\n")
+        f.write(f"\nDi {positive_tweets + neutral_tweets + negative_tweets} tweets analizzati abbiamo:\n")
+        f.write(f"Tweet Positivi: {positive_tweets}\n")
+        f.write(f"Tweet Neutrali: {neutral_tweets}\n")
+        f.write(f"Tweet Negativi: {negative_tweets}\n")
         f.write(f"\nI sentiment per ogni tweet sono i seguenti:\n")
         for i, row in df.iterrows():
             text = row['tweet']
@@ -148,6 +167,6 @@ with open('Risultati - Content Analysis.txt', 'w', encoding='utf-8') as f:
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Stampa un messaggio di conferma del salvataggio
+# Stampa un messaggio di conferma del salvataggio su file
 print("I risultati inerenti la Sentiment Analysis sono stati salvati sul file 'Risultati - Sentiment Analysis.txt'")
 print("I risultati inerenti la Content Analysis sono stati salvati su file 'Risultati - Content Analysis.txt'")

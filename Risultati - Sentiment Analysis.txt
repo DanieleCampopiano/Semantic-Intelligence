@@ -1,5 +1,10 @@
 La media del Sentiment Analysis dei tweet è: 0.15
 
+Di 5000 tweets analizzati abbiamo:
+Tweet Positivi: 2381
+Tweet Neutrali: 1332
+Tweet Negativi: 1287
+
 I sentiment per ogni tweet sono i seguenti:
 Testo: Tired, grumpy and unsure what my priorities are today. Not a good start to a busy week  #fb
 Sentimento: -0.21666666666666667
@@ -10004,4 +10009,4 @@ Sentimento: 0.0
 
 Il sentiment della frase ['i love dogs because the are beautiful'] è il seguente:
 ['positive']
-[[0.10729083 0.89270917]]
+[[0.1251823 0.8748177]]

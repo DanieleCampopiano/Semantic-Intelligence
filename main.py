@@ -1,5 +1,4 @@
 # Progetto per il Corso di Semantic Intelligence
-import analyzer as analyzer
 # Campopiano Daniele - 174624
 # Salvatore Carmine - 174337
 
@@ -28,7 +27,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # Carica il Dataset presente nella root del progetto
-df = pd.read_csv('dataset.csv')
+df = pd.read_csv('Dataset/datasetTweetCovid.csv')
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -72,7 +71,7 @@ x = vect.transform(texts)
 
 x_train, x_test , y_train, y_test =train_test_split(x,y)
 #print(x_train.shape,y_train.shape)
-model = LogisticRegression()
+model = LogisticRegression(max_iter=1000)
 model.fit(x_train,y_train)
 
 p_train = model.predict(x_train)
@@ -82,7 +81,7 @@ acc_train = accuracy_score(y_train,p_train)
 acc_test = accuracy_score(y_test,p_test)
 
 nuovi_testi = [
-    'i love dogs because the are beautiful',
+    'Cant wait to get the vaccine to be safe and secure'
 ]
 nuovi_x= vect.transform(nuovi_testi)
 prediction= model.predict(nuovi_x)
@@ -105,7 +104,7 @@ for tweet in df['clean_tweet']:
         neutral_tweets += 1
 
 # Salva i risultati su un file di testo
-with open('Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8') as f:
+with open('Risultati/Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8') as f:
         f.write(f"La media del Sentiment Analysis dei tweet è: {sentiment_mean:.2f}\n")
         f.write(f"\nDi {positive_tweets + neutral_tweets + negative_tweets} tweets analizzati abbiamo:\n")
         f.write(f"Tweet Positivi: {positive_tweets}\n")
@@ -153,7 +152,7 @@ for doc in df['doc']:
         entities.append(ent.text)
 
 # Salva i risultati su un file di testo
-with open('Risultati - Content Analysis.txt', 'w', encoding='utf-8') as f:
+with open('Risultati/Risultati - Content Analysis.txt', 'w', encoding='utf-8') as f:
     f.write("Risultati Content Analysis: 50 Parole più utilizzate\n\n")
     for word, count in topWords:
         f.write(f"{word}\t{count}\n")

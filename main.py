@@ -62,6 +62,8 @@ for i, row in df.iterrows():
     sentiment = blob.sentiment.polarity
     df.at[i, 'sentiment'] = sentiment
 
+
+'''
 texts = df['tweet']
 y = df['polarity']
 
@@ -81,10 +83,11 @@ acc_train = accuracy_score(y_train,p_train)
 acc_test = accuracy_score(y_test,p_test)
 
 nuovi_testi = [
-    'Cant wait to get the vaccine to be safe and secure'
+    'I feel awful, it was the worst experience. fucked up! Causes cancer'
 ]
 nuovi_x= vect.transform(nuovi_testi)
 prediction= model.predict(nuovi_x)
+'''
 
 # Esegue un'analisi di sentiment sui tweet
 positive_tweets = 0
@@ -115,9 +118,12 @@ with open('Risultati/Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8')
             text = row['tweet']
             sentiment = row['sentiment']
             f.write(f'Testo: {text}\nSentimento: {sentiment}\n')
-        f.write(f"\nIl sentiment della frase {nuovi_testi} è il seguente:\n")
-        f.write(f"{prediction}\n")
-        f.write(f"{model.predict_proba(nuovi_x)}")
+        #f.write(f"\nIl sentiment della frase {nuovi_testi} è il seguente:\n")
+        #f.write(f"{prediction}\n")
+        #f.write(f"{model.predict_proba(nuovi_x)}")
+
+# Stampa un messaggio di conferma del salvataggio su file
+print("I risultati inerenti la Sentiment Analysis sono stati salvati sul file 'Risultati - Sentiment Analysis.txt'")
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -142,30 +148,30 @@ nlp = spacy.load('en_core_web_sm')
 # Analizza la sintassi dei tweet
 df['doc'] = df['tweet'].apply(nlp)
 
+# I set a differenza delle liste ci permettono di non avere duplicati.
+sentences = set()
+entities = set()
+
 # Estrai le frasi e le entità nomi dai tweet
-sentences = []
-entities = []
 for doc in df['doc']:
     for sent in doc.sents:
-        sentences.append(sent.text)
+        sentences.add(sent.text)
     for ent in doc.ents:
-        entities.append(ent.text)
+        entities.add(ent.text)
 
 # Salva i risultati su un file di testo
 with open('Risultati/Risultati - Content Analysis.txt', 'w', encoding='utf-8') as f:
     f.write("Risultati Content Analysis: 50 Parole più utilizzate\n\n")
     for word, count in topWords:
         f.write(f"{word}\t{count}\n")
-    f.write("\nRisultati Content Analysis: Identifica frasi ed entità nomi\n\n")
-    f.write('Frasi:\n')
+    f.write(f"\nRisultati Content Analysis - Identificazione Frasi:\n")
     for sent in sentences:
         f.write(sent + '\n')
-    f.write('\nEntità nomi:\n')
-    for entity in set(entities):
+    f.write(f"\nRisultati Content Analysis - Identificazione Entità Nomi:\n")
+    for entity in entities:
         f.write(entity + '\n')
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    f.write(f"\nRisultati Content Analysis: {len(sentences)} frasi identificate")
+    f.write(f"\nRisultati Content Analysis: {len(entities)} entità nomi identificate")
 
 # Stampa un messaggio di conferma del salvataggio su file
-print("I risultati inerenti la Sentiment Analysis sono stati salvati sul file 'Risultati - Sentiment Analysis.txt'")
 print("I risultati inerenti la Content Analysis sono stati salvati su file 'Risultati - Content Analysis.txt'")

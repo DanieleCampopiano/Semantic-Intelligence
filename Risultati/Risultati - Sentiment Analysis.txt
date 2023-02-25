@@ -20157,7 +20157,3 @@ Testo: @___batshitcrazy @BarrowfordHead @Bectully I had mine yesterday and haven
 Sentimento: 0.625
 Testo: The smart sympathy attends into the oblong nothing. What if the educational feedback ate the ordinary? #COVAXIN https://t.co/N6oGtiETDP
 Sentimento: 0.07142857142857144
-
-Il sentiment della frase ['Cant wait to get the vaccine to be safe and secure'] è il seguente:
-[3]
-[[0.00848443 0.05034781 0.94116777]]

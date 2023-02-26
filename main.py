@@ -13,10 +13,13 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from collections import Counter
 from textblob import TextBlob
+
+''' Librerie per il funzionamento della Regressione Logistica per la Sentiment Analysis
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.feature_extraction.text import CountVectorizer
+'''
 
 # Queste righe possono essere commentata/decommentata in base a se le librerie indicate sono installate o meno
 # spacy.cli.download("en_core_web_sm")
@@ -33,7 +36,6 @@ df = pd.read_csv('Dataset/datasetTweetCovid.csv')
 
 # Sentiment Analysis: Calcola la Media generale del Sentiment dei tweet,
 # il sentiment per ogni tweet, il numero di Tweet con sentiment positivo/neutro/negativo
-# ed il sentiment in base ad una frase passata in input
 
 # Rimuovi gli hashtag, i link e i simboli dal testo del tweet
 df['clean_tweet'] = df['tweet'].str.replace('#', '').str.replace('http\S+|www.\S+', '', case=False)
@@ -63,7 +65,7 @@ for i, row in df.iterrows():
     df.at[i, 'sentiment'] = sentiment
 
 
-'''
+''' Funzione di Sentiment Analysis per il calcolo del Sentiment per una specifica frase passata in input
 texts = df['tweet']
 y = df['polarity']
 
@@ -83,7 +85,7 @@ acc_train = accuracy_score(y_train,p_train)
 acc_test = accuracy_score(y_test,p_test)
 
 nuovi_testi = [
-    'I feel awful, it was the worst experience. fucked up! Causes cancer'
+    'I feel awful, it was the worst experience'
 ]
 nuovi_x= vect.transform(nuovi_testi)
 prediction= model.predict(nuovi_x)
@@ -148,7 +150,7 @@ nlp = spacy.load('en_core_web_sm')
 # Analizza la sintassi dei tweet
 df['doc'] = df['tweet'].apply(nlp)
 
-# I set a differenza delle liste ci permettono di non avere duplicati.
+# I set a differenza delle liste ci permettono di non avere duplicati
 sentences = set()
 entities = set()
 

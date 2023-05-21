@@ -8,29 +8,31 @@
 import pandas as pd
 import warnings
 import spacy
+import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from collections import Counter
 from textblob import TextBlob
 
-''' Librerie per il funzionamento della Regressione Logistica per la Sentiment Analysis
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.feature_extraction.text import CountVectorizer
-'''
+# Librerie per il funzionamento della Regressione Logistica per la Sentiment Analysis
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import accuracy_score
+# from sklearn.feature_extraction.text import CountVectorizer
+
 
 # Queste righe possono essere commentata/decommentata in base a se le librerie indicate sono installate o meno
 # spacy.cli.download("en_core_web_sm")
 # nltk.download('stopwords')
 # nltk.download('vader_lexicon')
+# nltk.download('punkt')
 
 # Non stampa i FutureWarning nella console
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # Carica il Dataset presente nella root del progetto
-df = pd.read_csv('Dataset/datasetTweetCovid.csv')
+df = pd.read_csv('../Dataset/datasetTweetCovid.csv')
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -82,7 +84,7 @@ for tweet in df['clean_tweet']:
         neutral_tweets += 1
 
 # Salva i risultati su un file di testo
-with open('Risultati/Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8') as f:
+with open('../Risultati/Risultati - Sentiment Analysis.txt', 'w', encoding='utf-8') as f:
         f.write(f"La media del Sentiment Analysis dei tweet è: {sentiment_mean:.2f}\n")
         f.write(f"\nDi {positive_tweets + neutral_tweets + negative_tweets} tweets analizzati abbiamo:\n")
         f.write(f"Tweet Positivi: {positive_tweets}\n")
@@ -132,7 +134,7 @@ for doc in df['doc']:
         entities.add(ent.text)
 
 # Salva i risultati su un file di testo
-with open('Risultati/Risultati - Content Analysis.txt', 'w', encoding='utf-8') as f:
+with open('../Risultati/Risultati - Content Analysis.txt', 'w', encoding='utf-8') as f:
     f.write("Risultati Content Analysis: 50 Parole più utilizzate\n\n")
     for word, count in topWords:
         f.write(f"{word}\t{count}\n")

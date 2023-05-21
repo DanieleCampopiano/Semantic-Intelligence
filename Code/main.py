@@ -8,7 +8,6 @@
 import pandas as pd
 import warnings
 import spacy
-import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -21,8 +20,8 @@ from textblob import TextBlob
 # from sklearn.metrics import accuracy_score
 # from sklearn.feature_extraction.text import CountVectorizer
 
-
 # Queste righe possono essere commentata/decommentata in base a se le librerie indicate sono installate o meno
+# import nltk
 # spacy.cli.download("en_core_web_sm")
 # nltk.download('stopwords')
 # nltk.download('vader_lexicon')
